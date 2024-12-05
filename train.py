@@ -211,6 +211,7 @@ class ModelTrainer:
                                size=pred_masks.shape[-2:],
                                mode='nearest').squeeze(1).bool()
         
+        pred_boxes = pred['boxes']
         target_boxes = target['boxes']
         pred_scores = pred['scores']
 
