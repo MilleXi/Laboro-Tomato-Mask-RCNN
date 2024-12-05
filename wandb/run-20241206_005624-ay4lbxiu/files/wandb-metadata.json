@@ -1,0 +1,43 @@
+{
+  "os": "Windows-11-10.0.22631-SP0",
+  "python": "CPython 3.12.6",
+  "startedAt": "2024-12-05T16:56:24.552226Z",
+  "program": "c:\\Users\\MILLEX\\Desktop\\cv\\Laboro-Tomato-Mask-RCNN\\train.py",
+  "codePath": "train.py",
+  "git": {
+    "remote": "https://github.com/MilleXi/Laboro-Tomato-Mask-RCNN.git",
+    "commit": "6048e74a7fad0bd3b8d1bb2ab5f613e0c42cc8a4"
+  },
+  "email": "xyy318@126.com",
+  "root": "C:\\Users\\MILLEX\\Desktop\\cv\\Laboro-Tomato-Mask-RCNN",
+  "host": "xxyY9000P",
+  "username": "MILLEX",
+  "executable": "C:\\Users\\MILLEX\\Desktop\\cv\\Laboro-Tomato-Mask-RCNN\\.venv\\Scripts\\python.exe",
+  "codePathLocal": "train.py",
+  "cpu_count": 24,
+  "cpu_count_logical": 32,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "592324849664",
+      "used": "485756448768"
+    }
+  },
+  "memory": {
+    "total": "16978403328"
+  },
+  "cpu": {
+    "count": 24,
+    "countLogical": 32
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "memoryTotal": "8585740288",
+      "cudaCores": 3072,
+      "architecture": "Ada"
+    }
+  ],
+  "cudaVersion": "12.6"
+}
