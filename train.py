@@ -8,6 +8,7 @@ import wandb
 import cv2
 import logging
 import time
+import torch.nn.functional as F
 from data_preparation import process_dataset
 from data_preprocess import TomatoDataset
 from maskrcnn_model import EnhancedMaskRCNN
@@ -137,6 +138,7 @@ class ModelTrainer:
         
         wandb.log(avg_metrics)
         return avg_metrics
+    
     def visualize_features(self, image):
         """可视化特征图"""
         # 获取backbone的特征图
@@ -199,11 +201,14 @@ class ModelTrainer:
     
     def calculate_metrics(self, pred, target):
         pred_masks = pred['masks'] > 0.5
-        target_masks = target['masks']
+        # 调整目标掩码大小以匹配预测掩码
+        target_masks = F.interpolate(target['masks'].float(), 
+                                    size=pred_masks.shape[-2:],
+                                    mode='nearest').bool()
         pred_boxes = pred['boxes']
         target_boxes = target['boxes']
         pred_scores = pred['scores']
-        
+
         # 基础指标
         intersection = (pred_masks & target_masks).sum().float()
         union = (pred_masks | target_masks).sum().float()
