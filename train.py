@@ -179,8 +179,7 @@ class ModelTrainer:
         wandb.log({"predictions": wandb.Image(plt)})
         plt.close()
     
-    def box_iou(box1, box2):
-        # 计算边界框IoU
+    def box_iou(self, box1, box2):
         area1 = (box1[:, 2] - box1[:, 0]) * (box1[:, 3] - box1[:, 1])
         area2 = (box2[:, 2] - box2[:, 0]) * (box2[:, 3] - box2[:, 1])
         
@@ -192,8 +191,7 @@ class ModelTrainer:
         union = area1[:, None] + area2 - inter
         return inter / union
 
-    def recall_by_area(pred_masks, target_masks, area_mask):
-        """计算特定尺度目标的召回率"""
+    def recall_by_area(self, pred_masks, target_masks, area_mask):
         filtered_target = target_masks[area_mask]
         filtered_pred = pred_masks[area_mask]
         intersection = (filtered_pred & filtered_target).sum().float()
