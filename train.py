@@ -200,12 +200,17 @@ class ModelTrainer:
         return intersection / (filtered_target.sum() + 1e-6)
     
     def calculate_metrics(self, pred, target):
-        pred_masks = pred['masks'] > 0.5
+        pred_masks = pred['masks'].squeeze(1) > 0.5
+        target_masks = target['masks']
+
+        if len(target_masks.shape) == 3:
+            target_masks = target_masks.unsqueeze(1)
+
         # 调整目标掩码大小以匹配预测掩码
-        target_masks = F.interpolate(target['masks'].float(), 
-                                    size=pred_masks.shape[-2:],
-                                    mode='nearest').bool()
-        pred_boxes = pred['boxes']
+        target_masks = F.interpolate(target_masks.float(), 
+                               size=pred_masks.shape[-2:],
+                               mode='nearest').squeeze(1).bool()
+        
         target_boxes = target['boxes']
         pred_scores = pred['scores']
 
