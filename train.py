@@ -200,16 +200,31 @@ class ModelTrainer:
         return intersection / (filtered_target.sum() + 1e-6)
     
     def calculate_metrics(self, pred, target):
+        if len(pred['masks']) == 0:  # 处理无预测的情况
+            return {
+                'iou': 0.0,
+                'precision': 0.0,
+                'recall': 0.0,
+                'f1': 0.0,
+                'ap50': 0.0,
+                'ap75': 0.0,
+                'ap85': 0.0,
+                'map': 0.0
+            }
+
         pred_masks = pred['masks'].squeeze(1) > 0.5
         target_masks = target['masks']
-
         if len(target_masks.shape) == 3:
             target_masks = target_masks.unsqueeze(1)
-
-        # 调整目标掩码大小以匹配预测掩码
+        
+        # 确保batch维度匹配
+        min_size = min(len(pred_masks), len(target_masks))
+        pred_masks = pred_masks[:min_size]
+        target_masks = target_masks[:min_size]
+        
         target_masks = F.interpolate(target_masks.float(), 
-                               size=pred_masks.shape[-2:],
-                               mode='nearest').squeeze(1).bool()
+                                size=pred_masks.shape[-2:],
+                                mode='nearest').squeeze(1).bool()
         
         pred_boxes = pred['boxes']
         target_boxes = target['boxes']
