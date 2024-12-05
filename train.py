@@ -131,7 +131,8 @@ class ModelTrainer:
                 logger.info(f"已处理 {batch_idx}/{len(self.val_loader)} 批次")
         
         # 计算平均指标
-        avg_metrics = {k: np.mean(v) for k, v in metrics.items() if v}
+        avg_metrics = {k: np.mean([v.cpu().numpy() if torch.is_tensor(v) else v for v in values]) 
+              for k, values in metrics.items() if values}
         val_time = time.time() - val_start_time
         
         logger.info(
