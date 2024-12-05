@@ -104,14 +104,18 @@ class ModelTrainer:
     @torch.no_grad()
     def validate(self):
         self.model.eval()
-        metrics = {'precision': [], 'recall': [], 'f1': [], 'iou': []}
+        metrics = {
+            'precision': [], 'recall': [], 'f1': [], 'iou': [],
+            'ap50': [], 'ap75': [], 'ap85': [], 'map': [],
+            'small_recall': [], 'medium_recall': [], 'large_recall': []
+        }
         val_start_time = time.time()
         
         logger.info("开始验证...")
         for batch_idx, (images, targets) in enumerate(tqdm(self.val_loader)):
             images = [img.to(self.device) for img in images]
             targets = [{k: v.to(self.device) for k, v in t.items()} 
-                      for t in targets]
+                        for t in targets]
             
             outputs = self.model(images)
             
@@ -119,13 +123,15 @@ class ModelTrainer:
             for pred, target in zip(outputs, targets):
                 batch_metrics = self.calculate_metrics(pred, target)
                 for k, v in batch_metrics.items():
+                    if k not in metrics:
+                        metrics[k] = []
                     metrics[k].append(v)
             
             if batch_idx % 10 == 0:
                 logger.info(f"已处理 {batch_idx}/{len(self.val_loader)} 批次")
         
         # 计算平均指标
-        avg_metrics = {k: np.mean(v) for k, v in metrics.items()}
+        avg_metrics = {k: np.mean(v) for k, v in metrics.items() if v}
         val_time = time.time() - val_start_time
         
         logger.info(
@@ -133,7 +139,11 @@ class ModelTrainer:
             f"平均IoU: {avg_metrics['iou']:.4f}\n"
             f"平均精确率: {avg_metrics['precision']:.4f}\n"
             f"平均召回率: {avg_metrics['recall']:.4f}\n"
-            f"平均F1分数: {avg_metrics['f1']:.4f}"
+            f"平均F1分数: {avg_metrics['f1']:.4f}\n"
+            f"AP@50: {avg_metrics['ap50']:.4f}\n"
+            f"AP@75: {avg_metrics['ap75']:.4f}\n"
+            f"AP@85: {avg_metrics['ap85']:.4f}\n"
+            f"mAP: {avg_metrics['map']:.4f}"
         )
         
         wandb.log(avg_metrics)
