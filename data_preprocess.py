@@ -9,6 +9,7 @@ import os
 import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 import matplotlib.patches as patches
+from tqdm import tqdm
 
 class TomatoDataset(Dataset):
     def __init__(self, data, transform=None, train=True):
@@ -46,92 +47,64 @@ class TomatoDataset(Dataset):
                 ])
         else:
             self.transform = transform
+
+        # 如果数据集很大，加载时显示进度条
+        print(f"Dataset loaded with {len(data)} items.")
+
     
     def __len__(self):
         return len(self.data)
-    
+
     def __getitem__(self, idx):
         item = self.data[idx]
+
+        # 加载图像并显示进度
+        print(f"Processing image {idx + 1}/{len(self.data)}: {item['image_path']}")
         
-        # 延迟加载图像
+        # 读取图像并进行基本的处理
         image = cv2.imread(item['image_path'])
         if image is None:
             raise ValueError(f"无法加载图像: {item['image_path']}")
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        
-        # 获取标注数据
+
+        # 读取标注数据
         with open(item['ann_path'], 'r') as f:
             ann_data = json.load(f)
         
-        # 获取图像尺寸
-        height, width = image.shape[:2]
-        
-        # 初始化掩码
+        # 处理每个对象（例如，分割掩码）
         masks = []
-        labels = []
-        
         for obj in ann_data['objects']:
-            # 获取多边形的外部点
-            points = np.array(obj['points']['exterior'], dtype=np.int32)
+            # 计算每个分割掩码
+            points = obj['points']['exterior']
             polygon = Polygon(points)
-            
-            # 创建一个空白掩码，大小与图像一样
-            mask = np.zeros((height, width), dtype=np.uint8)
-            
-            # 生成掩码：对图像每个像素进行判断，是否在多边形内
-            for y in range(height):
-                for x in range(width):
+            mask = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
+            for y in range(image.shape[0]):
+                for x in range(image.shape[1]):
                     if polygon.contains(Point(x, y)):
                         mask[y, x] = 1
-            
-            # 将生成的掩码添加到列表
             masks.append(mask)
-            
-            # 获取标签
-            class_title = obj['classTitle']
-            class_idx = self.class_to_idx.get(class_title)
-            if class_idx is not None:
-                labels.append(class_idx)
         
-        # 将掩码转为 tensor
-        masks = np.array(masks)
+        # 转换掩码为 tensor
+        masks = np.array(masks)  # 使用 np.array 合并掩码列表
         masks = torch.as_tensor(masks, dtype=torch.uint8)
-        
-        # 如果有增强变换则进行处理
-        if self.train and hasattr(self, 'aug_transform'):
-            # 增强变换: 对图像和掩码进行相同的操作
-            image, masks = self.apply_transforms(image, masks)
-        
-        # 转换为tensor
-        image = self.transform(image)
-        
-        # 构建目标字典
-        target = {
-            'boxes': torch.zeros((len(masks), 4), dtype=torch.float32),  # 设置为空框
-            'labels': torch.tensor(labels, dtype=torch.int64),
-            'masks': masks,
-            'area': torch.tensor([mask.sum() for mask in masks], dtype=torch.float32),
-            'iscrowd': torch.zeros(len(masks), dtype=torch.int64)
-        }
-        
-        return image, target
 
-    def apply_transforms(self, image, masks):
-        # 对图像和掩码同时进行增强操作
-        if np.random.rand() < 0.5:
-            image = np.fliplr(image).copy()  # 水平翻转
-            masks = np.fliplr(masks).copy()
-        if np.random.rand() < 0.5:
-            image = np.flipud(image).copy()  # 垂直翻转
-            masks = np.flipud(masks).copy()
-        
-        # 随机旋转
-        angle = np.random.randint(-30, 30)
-        M = cv2.getRotationMatrix2D((image.shape[1] // 2, image.shape[0] // 2), angle, 1)
-        image = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
-        masks = [cv2.warpAffine(mask, M, (image.shape[1], image.shape[0])) for mask in masks]
-        
-        return image, masks
+        # 如果是训练集，则应用增强变换
+        if self.train:
+            for i in range(len(masks)):
+                masks[i] = self.aug_transform(masks[i])
+
+        # 应用图像的转换
+        if self.transform:
+            image = self.transform(image)
+
+        # 返回图像和目标
+        target = {
+            "boxes": torch.tensor([obj['points']['exterior'] for obj in ann_data['objects']], dtype=torch.float32),
+            "labels": torch.tensor([self.class_to_idx[obj['classTitle']] for obj in ann_data['objects']], dtype=torch.int64),
+            "masks": masks
+        }
+
+        return image, target
     
 
 def visualize(image, target):
