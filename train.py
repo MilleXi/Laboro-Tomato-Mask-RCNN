@@ -5,9 +5,9 @@ from torchvision.utils import make_grid
 import numpy as np
 from tqdm import tqdm
 import wandb
+import cv2
 import logging
 import time
-import cv2
 import torch.nn.functional as F
 from data_preparation import process_dataset
 from data_preprocess import TomatoDataset
@@ -21,7 +21,6 @@ class ModelTrainer:
     @staticmethod
     def collate_fn(batch):
         return tuple(zip(*batch))
-
     def __init__(self, model, train_dataset, val_dataset, batch_size=2, num_workers=4, device=None):
         self.device = device if device is not None else torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         logger.info(f"使用设备: {self.device}")
@@ -61,44 +60,46 @@ class ModelTrainer:
         logger.info("优化器已初始化")
         
         # 学习率调度器
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=3, gamma=0.1)
+        self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            self.optimizer, mode='min', patience=3, factor=0.1
+        )
         logger.info("学习率调度器已初始化")
         
-        # Weights & Biases初始化
-        wandb.init(project="laboro-tomato", entity="your_entity", config={"batch_size": batch_size})
+        # 初始化wandb
+        wandb.init(project="tomato-detection")
         logger.info("Wandb已初始化")
-
-    def train_one_epoch(self, epoch, log_frequency=10):
+        
+    def train_one_epoch(self, epoch):
         self.model.train()
-        running_loss = 0.0
-
-        pbar = tqdm(self.train_loader, desc=f"训练第 {epoch + 1} 轮", total=len(self.train_loader))
-
-        for images, targets in pbar:
-            images = [image.to(self.device) for image in images]
-            targets = [{k: v.to(self.device) for k, v in t.items()} for t in targets]
-
-            # 正向传播
-            loss_dict = self.model(images, targets)
-            losses = sum(loss for loss in loss_dict.values())
-
-            # 反向传播
-            self.optimizer.zero_grad()
-            losses.backward()
-            self.optimizer.step()
-
-            running_loss += losses.item()
-
-            # 更新进度条
-            pbar.set_postfix(loss=running_loss / (pbar.n + 1))
-
-            # Log到Wandb
-            wandb.log({"loss": losses.item()})
-
-        # 计算并返回该轮训练的平均损失
-        epoch_loss = running_loss / len(self.train_loader)
-        logger.info(f"第 {epoch + 1} 轮 - 训练损失: {epoch_loss:.4f}")
-        return epoch_loss
+        total_loss = 0
+        epoch_start_time = time.time()
+        batch_times = []
+        
+        with tqdm(self.train_loader, desc=f'Epoch {epoch}') as pbar:
+            for batch_idx, (images, targets) in enumerate(pbar):
+                batch_start_time = time.time()
+                
+                # 转换为tensor
+                images = torch.stack(images).to(self.device)
+                targets = [{k: v.to(self.device) for k, v in t.items()} for t in targets]
+                
+                loss_dict = self.model(images, targets)
+                losses = sum(loss for loss in loss_dict.values())
+                
+                self.optimizer.zero_grad()
+                losses.backward()
+                self.optimizer.step()
+                
+                total_loss += losses.item()
+                batch_time = time.time() - batch_start_time
+                batch_times.append(batch_time)
+                
+                pbar.set_postfix({'loss': f'{losses.item():.4f}', 'avg_batch_time': f'{np.mean(batch_times):.2f}s'})
+                
+                if batch_idx % 10 == 0:
+                    logger.info(f"Epoch {epoch} [{batch_idx}/{len(self.train_loader)}] Loss: {losses.item():.4f}")
+            
+        return total_loss / len(self.train_loader)
     
     @torch.no_grad()
     def validate(self):
