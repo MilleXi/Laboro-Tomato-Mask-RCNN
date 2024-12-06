@@ -9,7 +9,11 @@ import os
 import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 import matplotlib.patches as patches
-from tqdm import tqdm
+import logging
+
+# 配置日志，输出详细信息
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class TomatoDataset(Dataset):
     def __init__(self, data, transform=None, train=True):
@@ -47,63 +51,75 @@ class TomatoDataset(Dataset):
                 ])
         else:
             self.transform = transform
-
-        # 如果数据集很大，加载时显示进度条
-        print(f"Dataset loaded with {len(data)} items.")
-
     
     def __len__(self):
         return len(self.data)
-
+    
     def __getitem__(self, idx):
         item = self.data[idx]
-
-        # 加载图像并显示进度
-        print(f"Processing image {idx + 1}/{len(self.data)}: {item['image_path']}")
         
-        # 读取图像并进行基本的处理
+        # 输出当前处理的图像路径
+        logger.info(f"Processing image {idx + 1}/{len(self.data)}: {item['image_path']}")
+        
+        # 延迟加载图像
         image = cv2.imread(item['image_path'])
         if image is None:
-            raise ValueError(f"无法加载图像: {item['image_path']}")
+            logger.error(f"Failed to load image: {item['image_path']}")
+            raise ValueError(f"Unable to load image: {item['image_path']}")
+        
+        # 转换为RGB格式
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-        # 读取标注数据
+        
+        # 获取图像大小
+        height, width, _ = image.shape
+        
+        # 创建空白掩码
+        mask = np.zeros((height, width), dtype=np.uint8)
+        
+        # 读取标注文件
         with open(item['ann_path'], 'r') as f:
             ann_data = json.load(f)
         
-        # 处理每个对象（例如，分割掩码）
+        # 解析标注
         masks = []
-        for obj in ann_data['objects']:
-            # 计算每个分割掩码
-            points = obj['points']['exterior']
-            polygon = Polygon(points)
-            mask = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
-            for y in range(image.shape[0]):
-                for x in range(image.shape[1]):
-                    if polygon.contains(Point(x, y)):
-                        mask[y, x] = 1
-            masks.append(mask)
+        areas = []
+        labels = []
         
-        # 转换掩码为 tensor
-        masks = np.array(masks)  # 使用 np.array 合并掩码列表
+        for obj in ann_data['objects']:
+            if obj['geometryType'] != 'polygon':
+                continue
+            
+            # 提取每个物体的外轮廓
+            polygon_points = obj['points']['exterior']
+            polygon = Polygon(polygon_points)
+            
+            # 创建掩码
+            mask_obj = np.zeros((height, width), dtype=np.uint8)
+            for y in range(height):
+                for x in range(width):
+                    if polygon.contains(Point(x, y)):
+                        mask_obj[y, x] = 1
+            
+            masks.append(mask_obj)
+            areas.append(mask_obj.sum())  # 计算每个掩码的面积
+            labels.append(self.class_to_idx[obj['classTitle']])
+        
+        # 将掩码转为Tensor格式
         masks = torch.as_tensor(masks, dtype=torch.uint8)
-
-        # 如果是训练集，则应用增强变换
-        if self.train:
-            for i in range(len(masks)):
-                masks[i] = self.aug_transform(masks[i])
-
-        # 应用图像的转换
+        areas = torch.tensor(areas, dtype=torch.float32)
+        labels = torch.tensor(labels, dtype=torch.int64)
+        
+        target = {
+            'masks': masks,
+            'labels': labels,
+            'area': areas,
+            'image_id': torch.tensor([idx]),
+            'boxes': torch.tensor([[0, 0, width, height]], dtype=torch.float32)  # 用于兼容其他任务
+        }
+        
         if self.transform:
             image = self.transform(image)
-
-        # 返回图像和目标
-        target = {
-            "boxes": torch.tensor([obj['points']['exterior'] for obj in ann_data['objects']], dtype=torch.float32),
-            "labels": torch.tensor([self.class_to_idx[obj['classTitle']] for obj in ann_data['objects']], dtype=torch.int64),
-            "masks": masks
-        }
-
+        
         return image, target
     
 
