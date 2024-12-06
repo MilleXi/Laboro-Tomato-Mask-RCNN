@@ -94,6 +94,7 @@ class TomatoDataset(Dataset):
                 labels.append(class_idx)
         
         # 将掩码转为 tensor
+        masks = np.array(masks)
         masks = torch.as_tensor(masks, dtype=torch.uint8)
         
         # 如果有增强变换则进行处理
