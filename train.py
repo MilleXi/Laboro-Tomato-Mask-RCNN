@@ -7,6 +7,7 @@ from tqdm import tqdm
 import wandb
 import logging
 import time
+import cv2
 import torch.nn.functional as F
 from data_preparation import process_dataset
 from data_preprocess import TomatoDataset
