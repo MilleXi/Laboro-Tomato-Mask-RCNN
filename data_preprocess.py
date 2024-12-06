@@ -7,6 +7,8 @@ import json
 from PIL import Image
 import os
 import logging
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +48,12 @@ class TomatoDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
+    def calculate_bbox(self, polygon_points):
+        """计算多边形的边界框"""
+        x = polygon_points[:, 0]
+        y = polygon_points[:, 1]
+        return [float(x.min()), float(y.min()), float(x.max()), float(y.max())]
+
     def __getitem__(self, idx):
         item = self.data[idx]
         img_path = item['image_path']
@@ -62,19 +70,27 @@ class TomatoDataset(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         height, width, _ = image.shape
 
-        # 初始化掩码
-        mask = np.zeros((height, width), dtype=np.uint8)
+        # 初始化掩码列表和其他目标信息
+        masks = []
+        boxes = []
+        labels = []
 
         with open(ann_path, 'r') as f:
             ann_data = json.load(f)
 
-        labels = []
         for obj in ann_data['objects']:
             if obj['geometryType'] == 'polygon':
+                # 获取多边形点
                 polygon_points = np.array(obj['points']['exterior'], dtype=np.int32)
                 
-                # 使用 OpenCV 填充多边形到掩码
-                cv2.fillPoly(mask, [polygon_points], 1)
+                # 创建单个对象的掩码
+                obj_mask = np.zeros((height, width), dtype=np.uint8)
+                cv2.fillPoly(obj_mask, [polygon_points], 1)
+                masks.append(obj_mask)
+
+                # 计算边界框
+                bbox = self.calculate_bbox(polygon_points)
+                boxes.append(bbox)
 
                 # 获取类别标签
                 class_title = obj['classTitle']
@@ -82,56 +98,77 @@ class TomatoDataset(Dataset):
                 if class_idx is not None:
                     labels.append(class_idx)
 
+        # 确保至少有一个目标
+        if not masks:
+            # 如果没有目标，创建虚拟数据
+            masks = [np.zeros((height, width), dtype=np.uint8)]
+            boxes = [[0.0, 0.0, 1.0, 1.0]]
+            labels = [0]
+
         # 转换为张量
-        mask = torch.tensor(mask, dtype=torch.uint8)
-        labels = torch.tensor(labels, dtype=torch.int64)
+        masks = torch.as_tensor(masks, dtype=torch.uint8)
+        boxes = torch.as_tensor(boxes, dtype=torch.float32)
+        labels = torch.as_tensor(labels, dtype=torch.int64)
+
+        # 计算区域
+        area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
 
         if self.transform:
             image = Image.fromarray(image)
             image = self.transform(image)
 
+        # 构建目标字典
         target = {
-            'masks': mask,
+            'boxes': boxes,
             'labels': labels,
+            'masks': masks,
             'image_id': torch.tensor([idx]),
+            'area': area,
+            'iscrowd': torch.zeros((len(boxes),), dtype=torch.int64)
         }
 
         return image, target
     
 def visualize(image, target):
+    """可视化函数用于调试"""
+    # 反归一化图像
+    mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
+    std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
+    image = image * std + mean
+    
     # 转换图像格式从 Tensor [C, H, W] 到 [H, W, C]
     image = image.permute(1, 2, 0).cpu().numpy()
+    image = np.clip(image, 0, 1)  # 确保值在有效范围内
 
-    # 获取目标框、标签和掩码信息
+    # 获取目标信息
     boxes = target['boxes'].cpu().numpy()
     labels = target['labels'].cpu().numpy()
+    masks = target['masks'].cpu().numpy()
 
-    # 确保掩码是一个 Tensor
-    masks = target['masks']  # 如果 masks 已经是 Tensor，无需转换
-    if isinstance(masks, list):
-        masks = torch.as_tensor(masks, dtype=torch.uint8)
-    
-    # 使用 matplotlib 绘制图像
+    # 创建图像
     plt.figure(figsize=(10, 10))
-    plt.imshow(image)  # 直接显示图像
+    plt.imshow(image)
 
-    # 绘制掩码
-    for i in range(len(masks)):
-        mask = masks[i].cpu().numpy()  # 获取掩码
-        mask = np.ma.masked_where(mask == 0, mask)  # 只显示掩码部分
-        plt.imshow(mask, cmap='jet', alpha=0.5)  # alpha 控制透明度
+    # 绘制每个实例
+    for box, label, mask in zip(boxes, labels, masks):
+        # 绘制掩码
+        mask_image = np.ma.masked_where(mask == 0, mask)
+        plt.imshow(mask_image, alpha=0.5, cmap='jet')
 
-    # 绘制边界框
-    for i in range(len(boxes)):
-        box = boxes[i]  # 获取边界框
-        x_min, y_min, x_max, y_max = box
-        rect = patches.Rectangle((x_min, y_min), x_max - x_min, y_max - y_min,
-                                 linewidth=2, edgecolor='r', facecolor='none')  # 红色边框
+        # 绘制边界框
+        x1, y1, x2, y2 = box
+        rect = patches.Rectangle(
+            (x1, y1), x2 - x1, y2 - y1,
+            linewidth=2, edgecolor='r', facecolor='none'
+        )
         plt.gca().add_patch(rect)
 
-    plt.axis('off')  # 不显示坐标轴
-    plt.show()
+        # 添加类别标签
+        plt.text(x1, y1, f'Class {label}', 
+                bbox=dict(facecolor='white', alpha=0.7))
 
+    plt.axis('off')
+    plt.show()
 
 # 使用示例
 # dataset = TomatoDataset(train_data, train=True)
