@@ -106,6 +106,10 @@ class TomatoDataset(Dataset):
             labels = [0]
 
         # 转换为张量
+        masks = np.array(masks)
+        boxes = np.array(boxes, dtype=np.float32)
+        labels = np.array(labels, dtype=np.int64)
+
         masks = torch.as_tensor(masks, dtype=torch.uint8)
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
         labels = torch.as_tensor(labels, dtype=torch.int64)
