@@ -54,14 +54,15 @@ else:
 # 使用模型检测图片中的物体
 results = model.detect([image], verbose=0)
 r = results[0]
-
+os.makedirs('pic',exist_ok=True)
 # 可视化检测结果
 mrcnn.visualize.display_instances(image=image, 
                                   boxes=r['rois'], 
                                   masks=r['masks'], 
                                   class_ids=r['class_ids'], 
                                   class_names=CLASS_NAMES, 
-                                  scores=r['scores'])
+                                  scores=r['scores'],
+                                  save_fig_path='pic')
 
 # 打印检测结果
 print("检测结果：")
