@@ -34,30 +34,49 @@ class LaboroTomatoDataset(mrcnn.utils.Dataset):
             self.add_image('dataset', image_id=image_id, path=img_path, annotation=ann_path)
 
     def load_mask(self, image_id):
+        # 获取图片的信息
         info = self.image_info[image_id]
         annotation_path = info['annotation']
+        
+        # 读取标注文件
         with open(annotation_path, 'r') as f:
             data = json.load(f)
-
-        h, w = data['imageHeight'], data['imageWidth']
-        masks = zeros([h, w, len(data['shapes'])], dtype='uint8')
-
+        
+        # 获取图片的高度和宽度
+        h, w = data['size']['height'], data['size']['width']
+        
+        # 初始化掩码
+        masks = zeros([h, w, len(data['objects'])], dtype='uint8')
+        
         class_ids = []
-        for i, shape in enumerate(data['shapes']):
-            points = shape['points']
-            class_name = shape['label']
+        
+        # 遍历所有标注对象
+        for i, obj in enumerate(data['objects']):
+            # 获取类别名称
+            class_name = obj['classTitle']
             if class_name not in self.class_names:
                 continue
             class_id = self.class_names.index(class_name)
-
-            # 创建掩码
+            
+            # 提取多边形点
+            points = obj['points']['exterior']
             rr, cc = self.polygon_to_mask(points, h, w)
+            
+            # 将掩码更新为1
             masks[rr, cc, i] = 1
             class_ids.append(class_id)
-
+        
+        # 返回掩码和类别ID数组
         return masks, asarray(class_ids, dtype='int32')
 
     def polygon_to_mask(self, points, height, width):
+        """
+        将多边形点转换为掩码
+        :param points: 多边形点列表 [(x1, y1), (x2, y2), ...]
+        :param height: 图片高度
+        :param width: 图片宽度
+        :return: 掩码的行列坐标
+        """
         from skimage.draw import polygon
         y_points, x_points = zip(*points)
         rr, cc = polygon(y_points, x_points, (height, width))
