@@ -1,0 +1,754 @@
+{
+    "description": "",
+    "tags": [],
+    "size": {
+        "height": 4160,
+        "width": 3120
+    },
+    "objects": [
+        {
+            "id": 14422456,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.438Z",
+            "updatedAt": "2023-07-11T11:57:23.438Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        3098,
+                        1077
+                    ],
+                    [
+                        3005,
+                        1123
+                    ],
+                    [
+                        2963,
+                        1197
+                    ],
+                    [
+                        2934,
+                        1274
+                    ],
+                    [
+                        2945,
+                        1323
+                    ],
+                    [
+                        2987,
+                        1364
+                    ],
+                    [
+                        3052,
+                        1392
+                    ],
+                    [
+                        3116,
+                        1397
+                    ],
+                    [
+                        3116,
+                        1079
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422455,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.438Z",
+            "updatedAt": "2023-07-11T11:57:23.438Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        2914,
+                        1528
+                    ],
+                    [
+                        2812,
+                        1595
+                    ],
+                    [
+                        2771,
+                        1691
+                    ],
+                    [
+                        2772,
+                        1739
+                    ],
+                    [
+                        2823,
+                        1790
+                    ],
+                    [
+                        2911,
+                        1817
+                    ],
+                    [
+                        2994,
+                        1817
+                    ],
+                    [
+                        3070,
+                        1795
+                    ],
+                    [
+                        3118,
+                        1761
+                    ],
+                    [
+                        3118,
+                        1519
+                    ],
+                    [
+                        3069,
+                        1503
+                    ],
+                    [
+                        2920,
+                        1524
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422454,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.438Z",
+            "updatedAt": "2023-07-11T11:57:23.438Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        2856,
+                        1899
+                    ],
+                    [
+                        2792,
+                        1953
+                    ],
+                    [
+                        2767,
+                        2006
+                    ],
+                    [
+                        2763,
+                        2068
+                    ],
+                    [
+                        2789,
+                        2128
+                    ],
+                    [
+                        2876,
+                        2171
+                    ],
+                    [
+                        2956,
+                        2173
+                    ],
+                    [
+                        3027,
+                        2166
+                    ],
+                    [
+                        3118,
+                        2086
+                    ],
+                    [
+                        3107,
+                        1915
+                    ],
+                    [
+                        3040,
+                        1855
+                    ],
+                    [
+                        2983,
+                        1853
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422453,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.437Z",
+            "updatedAt": "2023-07-11T11:57:23.437Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        2867,
+                        2173
+                    ],
+                    [
+                        2794,
+                        2200
+                    ],
+                    [
+                        2745,
+                        2262
+                    ],
+                    [
+                        2762,
+                        2351
+                    ],
+                    [
+                        2832,
+                        2400
+                    ],
+                    [
+                        2896,
+                        2409
+                    ],
+                    [
+                        2949,
+                        2411
+                    ],
+                    [
+                        3016,
+                        2378
+                    ],
+                    [
+                        3047,
+                        2315
+                    ],
+                    [
+                        3050,
+                        2255
+                    ],
+                    [
+                        3034,
+                        2202
+                    ],
+                    [
+                        2989,
+                        2171
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422452,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.437Z",
+            "updatedAt": "2023-07-11T11:57:23.437Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        45,
+                        2038
+                    ],
+                    [
+                        96,
+                        2031
+                    ],
+                    [
+                        134,
+                        2051
+                    ],
+                    [
+                        140,
+                        2115
+                    ],
+                    [
+                        104,
+                        2157
+                    ],
+                    [
+                        58,
+                        2160
+                    ],
+                    [
+                        29,
+                        2158
+                    ],
+                    [
+                        11,
+                        2109
+                    ],
+                    [
+                        15,
+                        2068
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422451,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.437Z",
+            "updatedAt": "2023-07-11T11:57:23.437Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        40,
+                        2318
+                    ],
+                    [
+                        82,
+                        2335
+                    ],
+                    [
+                        93,
+                        2366
+                    ],
+                    [
+                        89,
+                        2385
+                    ],
+                    [
+                        74,
+                        2415
+                    ],
+                    [
+                        47,
+                        2425
+                    ],
+                    [
+                        0,
+                        2413
+                    ],
+                    [
+                        4,
+                        2326
+                    ],
+                    [
+                        35,
+                        2320
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422450,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        460,
+                        3692
+                    ],
+                    [
+                        423,
+                        3685
+                    ],
+                    [
+                        378,
+                        3703
+                    ],
+                    [
+                        362,
+                        3743
+                    ],
+                    [
+                        363,
+                        3772
+                    ],
+                    [
+                        402,
+                        3819
+                    ],
+                    [
+                        436,
+                        3823
+                    ],
+                    [
+                        469,
+                        3810
+                    ],
+                    [
+                        503,
+                        3763
+                    ],
+                    [
+                        514,
+                        3732
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422449,
+            "classId": 20793,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_half_ripened",
+            "points": {
+                "exterior": [
+                    [
+                        1621,
+                        3185
+                    ],
+                    [
+                        1651,
+                        3156
+                    ],
+                    [
+                        1697,
+                        3150
+                    ],
+                    [
+                        1720,
+                        3179
+                    ],
+                    [
+                        1719,
+                        3210
+                    ],
+                    [
+                        1712,
+                        3231
+                    ],
+                    [
+                        1670,
+                        3255
+                    ],
+                    [
+                        1640,
+                        3252
+                    ],
+                    [
+                        1627,
+                        3231
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422448,
+            "classId": 20792,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_fully_ripened",
+            "points": {
+                "exterior": [
+                    [
+                        1617,
+                        3184
+                    ],
+                    [
+                        1590,
+                        3165
+                    ],
+                    [
+                        1564,
+                        3156
+                    ],
+                    [
+                        1539,
+                        3162
+                    ],
+                    [
+                        1522,
+                        3172
+                    ],
+                    [
+                        1521,
+                        3210
+                    ],
+                    [
+                        1533,
+                        3239
+                    ],
+                    [
+                        1565,
+                        3260
+                    ],
+                    [
+                        1597,
+                        3259
+                    ],
+                    [
+                        1611,
+                        3253
+                    ],
+                    [
+                        1625,
+                        3232
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422447,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        1666,
+                        2977
+                    ],
+                    [
+                        1698,
+                        2962
+                    ],
+                    [
+                        1744,
+                        2980
+                    ],
+                    [
+                        1761,
+                        2998
+                    ],
+                    [
+                        1768,
+                        3013
+                    ],
+                    [
+                        1761,
+                        3042
+                    ],
+                    [
+                        1748,
+                        3054
+                    ],
+                    [
+                        1723,
+                        3058
+                    ],
+                    [
+                        1692,
+                        3051
+                    ],
+                    [
+                        1660,
+                        3023
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422446,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        627,
+                        3123
+                    ],
+                    [
+                        591,
+                        3130
+                    ],
+                    [
+                        572,
+                        3155
+                    ],
+                    [
+                        567,
+                        3179
+                    ],
+                    [
+                        570,
+                        3196
+                    ],
+                    [
+                        581,
+                        3213
+                    ],
+                    [
+                        629,
+                        3224
+                    ],
+                    [
+                        654,
+                        3217
+                    ],
+                    [
+                        668,
+                        3172
+                    ],
+                    [
+                        668,
+                        3144
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422445,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        671,
+                        3155
+                    ],
+                    [
+                        689,
+                        3134
+                    ],
+                    [
+                        735,
+                        3139
+                    ],
+                    [
+                        757,
+                        3149
+                    ],
+                    [
+                        768,
+                        3163
+                    ],
+                    [
+                        768,
+                        3202
+                    ],
+                    [
+                        760,
+                        3231
+                    ],
+                    [
+                        730,
+                        3243
+                    ],
+                    [
+                        690,
+                        3242
+                    ],
+                    [
+                        654,
+                        3220
+                    ],
+                    [
+                        673,
+                        3158
+                    ]
+                ],
+                "interior": []
+            }
+        },
+        {
+            "id": 14422444,
+            "classId": 20794,
+            "description": "",
+            "geometryType": "polygon",
+            "labelerLogin": "gr@datasetninja.com",
+            "createdAt": "2023-07-11T11:57:23.436Z",
+            "updatedAt": "2023-07-11T11:57:23.436Z",
+            "tags": [],
+            "classTitle": "l_green",
+            "points": {
+                "exterior": [
+                    [
+                        637,
+                        3101
+                    ],
+                    [
+                        638,
+                        3063
+                    ],
+                    [
+                        662,
+                        3038
+                    ],
+                    [
+                        694,
+                        3036
+                    ],
+                    [
+                        725,
+                        3044
+                    ],
+                    [
+                        738,
+                        3066
+                    ],
+                    [
+                        738,
+                        3096
+                    ],
+                    [
+                        730,
+                        3122
+                    ],
+                    [
+                        701,
+                        3131
+                    ],
+                    [
+                        664,
+                        3131
+                    ]
+                ],
+                "interior": []
+            }
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+    "classes": [
+        {
+            "title": "b_fully_ripened",
+            "shape": "polygon",
+            "color": "#FF00FF",
+            "geometry_config": {},
+            "id": 20789,
+            "hotkey": ""
+        },
+        {
+            "title": "b_green",
+            "shape": "polygon",
+            "color": "#00FFFF",
+            "geometry_config": {},
+            "id": 20791,
+            "hotkey": ""
+        },
+        {
+            "title": "b_half_ripened",
+            "shape": "polygon",
+            "color": "#0000FF",
+            "geometry_config": {},
+            "id": 20790,
+            "hotkey": ""
+        },
+        {
+            "title": "l_fully_ripened",
+            "shape": "polygon",
+            "color": "#FF1493",
+            "geometry_config": {},
+            "id": 20792,
+            "hotkey": ""
+        },
+        {
+            "title": "l_green",
+            "shape": "polygon",
+            "color": "#7FFFD4",
+            "geometry_config": {},
+            "id": 20794,
+            "hotkey": ""
+        },
+        {
+            "title": "l_half_ripened",
+            "shape": "polygon",
+            "color": "#1E90FF",
+            "geometry_config": {},
+            "id": 20793,
+            "hotkey": ""
+        }
+    ],
+    "tags": [],
+    "projectType": "images"
+}
