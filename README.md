@@ -45,10 +45,18 @@
   - 支持 TensorFlow 2.0.0 和 Keras 2.2.4 或 2.3.1。
   - 支持 Python 3.7.3（兼容 Python 3.6.9 和 3.6.13）。
   - **注意**：不支持 TensorFlow 1.x。
+  - **`tomato_training.py`**：用于训练模型的脚本，包含数据加载、模型训练和回调设置。
+  - **`tomato_prediction.py`**：用于对测试数据进行预测的脚本。
+  - **`requirements.txt`**：项目的依赖包列表，确保你安装了正确的环境。
+  - **`tomato_training_wandb.py`**：在原`tomato_training.py`基础上集成了 Weights & Biases (Wandb) 相关代码。
 
 ## 参考资料
 - Mask R-CNN TensorFlow 2 版本实现：[Ahmed Gad's Mask R-CNN](https://github.com/ahmedfgad/Mask-RCNN-TF2)
 - 数据集：[Laboro Tomato Dataset](https://datasetninja.com/laboro-tomato)
 
+## 其他信息
+1. **Wandb 集成**：项目集成了 [Weights & Biases](https://wandb.ai/)，用于实时记录和可视化训练过程。你可以通过 Wandb 仪表盘实时查看每次运行的终端输出、训练中的图像、损失值、准确率等指标，最终权重会保存在平台中以便下载。
+2. **模型性能**：该项目适合初学者用于学习 Mask R-CNN 和目标检测任务。由于数据集较为简单，它可以帮助你快速了解如何使用 Mask R-CNN 进行目标检测与分类任务。
+
 ## 联系方式
-如果遇到任何问题或有建议，请在 [GitHub](https://github.com/MilleXi/Laboro-Tomato-Mask-RCNN) 提交 Issue。
+如果遇到任何问题或有建议，请在 [GitHub](https://github.com/MilleXi/Laboro-Tomato-Mask-RCNN) 提交 Issue 或 PR，感谢你的参与！
