@@ -27,7 +27,7 @@ model = mrcnn.model.MaskRCNN(mode="inference",
                              model_dir=os.getcwd())
 
 # 加载模型权重
-model.load_weights(filepath="laboro_tomato_mask_rcnn.h5", 
+model.load_weights(filepath="mask_rcnn_final.h5", 
                    by_name=True)
 
 # 定义输入图片路径和标注文件路径

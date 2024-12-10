@@ -123,5 +123,5 @@ model.train(train_dataset=train_dataset,
             layers='heads')
 
 # 保存训练好的权重
-model_path = 'LaboroTomato_mask_rcnn_trained.h5'
+model_path = 'mask_rcnn_final.h5'
 model.keras_model.save_weights(model_path)
