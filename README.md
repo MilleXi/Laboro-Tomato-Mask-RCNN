@@ -48,7 +48,7 @@
   - **`tomato_training.py`**：用于训练模型的脚本，包含数据加载、模型训练和回调设置。
   - **`tomato_prediction.py`**：用于对测试数据进行预测的脚本。
   - **`requirements.txt`**：项目的依赖包列表，确保你安装了正确的环境。
-  - **`tomato_training_wandb.py`**：在原`tomato_training.py`基础上集成了 Weights & Biases (Wandb) 相关代码。
+  - **`tomato_training_wandb.py`**：在原`tomato_training.py`基础上集成了 Weights & Biases (Wandb) 相关代码。(二者择一运行即可)
 
 ## 参考资料
 - Mask R-CNN TensorFlow 2 版本实现：[Ahmed Gad's Mask R-CNN](https://github.com/ahmedfgad/Mask-RCNN-TF2)
