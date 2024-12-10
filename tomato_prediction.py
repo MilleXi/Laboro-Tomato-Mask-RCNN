@@ -62,7 +62,7 @@ mrcnn.visualize.display_instances(image=image,
                                   class_ids=r['class_ids'], 
                                   class_names=CLASS_NAMES, 
                                   scores=r['scores'],
-                                  save_fig_path='pic')
+                                  save_fig_path='pic/inference.png')
 
 # 打印检测结果
 print("检测结果：")
