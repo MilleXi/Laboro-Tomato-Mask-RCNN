@@ -31,8 +31,8 @@ model.load_weights(filepath="mask_rcnn_final.h5",
                    by_name=True)
 
 # 定义输入图片路径和标注文件路径
-image_folder = "laboro-tomato-DatasetNinja/Train/img"
-annotation_folder = "laboro-tomato-DatasetNinja/Train/ann"
+image_folder = "laboro-tomato-DatasetNinja/Test/img"
+annotation_folder = "laboro-tomato-DatasetNinja/Test/ann"
 image_name = "IMG_0991.jpg"
 annotation_name = image_name + ".json"
 
